@@ -1,22 +1,12 @@
 package models
 
-import "github.com/jinzhu/gorm"
-
-//Student ...
-type Student struct {
-	gorm.Model
-	Name           string `json:"name"`
-	Age            string `json:"age"`
-	Standard       string `json:"standard"`
-	SchoolCode     int    `json:"schoolCode"`
-	IdentityNumber int    `json:"identityNumber"`
-}
+import "github.com/tyagip966/common-repo/models"
 
 //StudentService ...
 type StudentService interface {
-	AddStudent(input Student) (*Student, error)
-	GetStudent(id int) (*Student, error)
-	GetStudents(schoolCode int) ([]Student, error)
-	DeleteStudent(id int) (*Student, error)
-	UpdateStudent(id int, input Student) (*Student, error)
+	AddStudent(input models.Student) (*models.Student, error)
+	GetStudent(id int) (*models.Student, error)
+	GetStudents(schoolCode int) ([]models.Student, error)
+	DeleteStudent(id int) (*models.Student, error)
+	UpdateStudent(id int, input models.Student) (*models.Student, error)
 }

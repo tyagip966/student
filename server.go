@@ -5,13 +5,13 @@ package student
 import (
 	"context"
 	"fmt"
+	"github.com/jinzhu/copier"
+	"github.com/tyagip966/common-repo/models"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"github.com/jinzhu/copier"
 	"log"
 	"net"
 	"student/constants"
-	"student/models"
 	"student/models/postgres"
 	"student/pb"
 )
@@ -28,9 +28,9 @@ func (g GrpcServer) AddStudent(ctx context.Context, request *pb.AddStudentReques
 		return nil, err
 	}
 	respone := new(pb.Student)
-	copier.Copy(respone,result)
+	copier.Copy(respone, result)
 	return &pb.AddStudentResponse{
-		Student:              respone,
+		Student: respone,
 	}, nil
 }
 
@@ -40,23 +40,23 @@ func (g GrpcServer) GetStudent(ctx context.Context, request *pb.GetStudentReques
 		return nil, err
 	}
 	respone := new(pb.Student)
-	copier.Copy(respone,result)
+	copier.Copy(respone, result)
 	return &pb.AddStudentResponse{
-		Student:              respone,
+		Student: respone,
 	}, nil
 }
 
 func (g GrpcServer) UpdateStudent(ctx context.Context, request *pb.UpdateStudentRequest) (*pb.AddStudentResponse, error) {
 	var input models.Student
 	_ = copier.Copy(&input, &request.Input)
-	result, err := g.Service.UpdateStudent(int(request.ID),input)
+	result, err := g.Service.UpdateStudent(int(request.ID), input)
 	if err != nil {
 		return nil, err
 	}
 	respone := new(pb.Student)
-	copier.Copy(respone,result)
+	copier.Copy(respone, result)
 	return &pb.AddStudentResponse{
-		Student:              respone,
+		Student: respone,
 	}, nil
 }
 
@@ -66,9 +66,9 @@ func (g GrpcServer) DeleteStudent(ctx context.Context, request *pb.DeleteStudent
 		return nil, err
 	}
 	respone := new(pb.Student)
-	copier.Copy(respone,result)
+	copier.Copy(respone, result)
 	return &pb.AddStudentResponse{
-		Student:              respone,
+		Student: respone,
 	}, nil
 }
 
@@ -78,27 +78,27 @@ func (g GrpcServer) GetStudents(ctx context.Context, request *pb.GetStudentsRequ
 		return nil, err
 	}
 	var respone []*pb.Student
-	for _,i :=  range result {
+	for _, i := range result {
 		res := new(pb.Student)
-		_ = copier.Copy(res,&i)
-		respone= append(respone,res)
+		_ = copier.Copy(res, &i)
+		respone = append(respone, res)
 	}
-	copier.Copy(respone,result)
+	copier.Copy(respone, result)
 	return &pb.GetStudentsResponse{
-		Student:              respone,
+		Student: respone,
 	}, nil
 }
 
-func ListenGRPC(s postgres.StudentService, port int) (*postgres.StudentService,error) {
+func ListenGRPC(s postgres.StudentService, port int) (*postgres.StudentService, error) {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	serv := grpc.NewServer()
 	pb.RegisterStudentServiceServer(serv, &GrpcServer{&s})
 	reflection.Register(serv)
-	log.Println("Server Started at ",constants.ServerPort)
-	return &s,serv.Serve(lis)
+	log.Println("Server Started at ", constants.ServerPort)
+	return &s, serv.Serve(lis)
 }
