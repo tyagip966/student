@@ -1,0 +1,16 @@
+package constants
+
+const (
+	//HOST ...
+	HOST = "172.17.0.2"
+	//DBNAME ...
+	DBNAME = "bell-notification"
+	//PORT ...
+	PORT = 5432
+	//UERNAME ...
+	UERNAME = "krawler"
+	//PASSWORD ...
+	PASSWORD = "Krawler@123"
+
+	ServerPort = 8080
+)
